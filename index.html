@@ -6,9 +6,20 @@
 </head>
 <body>
 	<div id="app">
-		<p> Hola {{ nombre }}</p>
-		<a :href="url" target="_blank">{{page}}</a>
+		<template v-if="mostrar">
+			<h1>mi titulo</h1>
+			<h2>subtitulo</h2>
+			<p> Hola {{ nombre }}</p>
+			<a :href="url" target="_blank">{{page}}</a>
+		</template>
 	</div>
+	<!-- 
+
+		to test you can use in the console
+		app.mostrar = false
+		the element will dissapear. 
+
+	 -->
 
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
 	<script>
@@ -17,7 +28,8 @@
 		data: {
 			nombre: "ken",
 			url: "https://google.com",
-			page: "google link"
+			page: "google link",
+			mostrar: true
 		}
 
 	})
