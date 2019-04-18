@@ -6,14 +6,28 @@
 </head>
 <body>
 	<div id="app">
-		<button v-on:click="sumar">Sumar 1</button>
+		<input type="text" name="nombre" placeholder="your name" v-model="nombre">
+		<p>Testing with your name in capital letters: {{ nombre | uppercase}}</p>
 		<!-- you can also use only the abbreviation
 		例: <button @click="sumar">Sumar 1</button>
 		 -->
-		<button @click="contador++">Sumar 1</button>
-		<button v-on:click="restar">restar 1</button>
-		<button @click="contador--">restar 1</button>
-		El contador esta en {{contador}}
+		 <!-- forma abreviada
+				 <form @submit.prevent action="" method="post">
+		  -->
+		 <form v-on:submit.prevent="submit" action="" method="post">
+		 	<h2>que te gusta mas para hacer front?</h2>
+		 	<input v-model="palabras" type="checkbox" id="vue" value="vue">
+		 	<label for="vue">Vue js</label>
+		 	<input v-model="palabras" type="checkbox" id="seo" value="seo">
+		 	<label for="seo">SEO</label>
+		 	<input v-model="palabras" type="checkbox" id="react" value="react">
+		 	<label for="react">React js</label>
+		 	<input v-model="palabras" type="checkbox" id="ember" value="ember">
+		 	<label for="ember">Ember js</label>
+		 	<input type="text" v-model="persona" name="persona">
+			<button type="submit">Enviar</button>
+		 </form>
+	
 
 	</div>
 	<!-- 
@@ -32,15 +46,22 @@
 	let app = new Vue({
 		el: "#app",
 		data: {
-			contador : 0
+			contador : 0,
+			nombre: '',
+			persona: '',
+			palabras:[]
+		},
+		filters:{
+			uppercase: function(str){
+				console.log(str)
+				return str.toUpperCase();
+			}
 		},
 		methods:{
-			sumar: function(){
-				//below code is the same as this.contador = this.contador +1
-				this.contador++
-			},
-			restar: function(){
-				this.contador--
+			submit: function(){
+				console.log("se ejecuta el metodo submit")
+				console.log(this.palabras)
+				console.log(this.persona)
 			}
 		}
 
@@ -48,4 +69,8 @@
 	</script>
 </body>
 </html>
+
+
+
+
 
