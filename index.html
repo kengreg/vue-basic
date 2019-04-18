@@ -6,10 +6,14 @@
 </head>
 <body>
 	<div id="app">
-
-			<h1>{{titulo | uppercase}}</h1>
-			<h2>{{subtitulo | lowercase | capitalize}}</h2>
-
+		<button v-on:click="sumar">Sumar 1</button>
+		<!-- you can also use only the abbreviation
+		例: <button @click="sumar">Sumar 1</button>
+		 -->
+		<button @click="contador++">Sumar 1</button>
+		<button v-on:click="restar">restar 1</button>
+		<button @click="contador--">restar 1</button>
+		El contador esta en {{contador}}
 
 	</div>
 	<!-- 
@@ -28,18 +32,15 @@
 	let app = new Vue({
 		el: "#app",
 		data: {
-			titulo : "soy titulo",
-			subtitulo: "soy un subtitulo para ti"
+			contador : 0
 		},
-		filters:{
-			uppercase: function(str){
-				return str.toUpperCase()
+		methods:{
+			sumar: function(){
+				//below code is the same as this.contador = this.contador +1
+				this.contador++
 			},
-			lowercase: function(str){
-				return str.toLowerCase()
-			},
-			capitalize: function(str){
-				return str.charAt(0).toUpperCase() + str.substr(1,str.length).toLowerCase();
+			restar: function(){
+				this.contador--
 			}
 		}
 
