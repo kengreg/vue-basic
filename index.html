@@ -6,8 +6,7 @@
 </head>
 <body>
 	<div id="app">
-		<input type="text" name="nombre" placeholder="your name" v-model="nombre">
-		<p>Testing with your name in capital letters: {{ nombre | uppercase}}</p>
+
 		<!-- you can also use only the abbreviation
 		例: <button @click="sumar">Sumar 1</button>
 		 -->
@@ -16,15 +15,10 @@
 		  -->
 		 <form v-on:submit.prevent="submit" action="" method="post">
 		 	<h2>que te gusta mas para hacer front?</h2>
-		 	<input v-model="palabras" type="checkbox" id="vue" value="vue">
-		 	<label for="vue">Vue js</label>
-		 	<input v-model="palabras" type="checkbox" id="seo" value="seo">
-		 	<label for="seo">SEO</label>
-		 	<input v-model="palabras" type="checkbox" id="react" value="react">
-		 	<label for="react">React js</label>
-		 	<input v-model="palabras" type="checkbox" id="ember" value="ember">
-		 	<label for="ember">Ember js</label>
-		 	<input type="text" v-model="persona" name="persona">
+		 	<template v-for="curso in cursos">
+		 		<input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value">
+		 		<label v-bind:for="curso.value">{{curso.nombre}}</label>
+		 	</template>
 			<button type="submit">Enviar</button>
 		 </form>
 	
@@ -46,22 +40,26 @@
 	let app = new Vue({
 		el: "#app",
 		data: {
-			contador : 0,
-			nombre: '',
-			persona: '',
-			palabras:[]
+			cursosSeleccionados:[],
+			cursos:[
+			{nombre: 'vue.js', value: 'vue'},
+			{nombre: 'react.js', value: 'react'},
+			{nombre: 'SEO', value: 'SEO'},
+			{nombre: 'Node.js', value: 'Node'},
+			{nombre: 'anime', value: 'anime'},
+			]
 		},
-		filters:{
-			uppercase: function(str){
-				console.log(str)
-				return str.toUpperCase();
-			}
-		},
+		// filters:{
+		// 	uppercase: function(str){
+		// 		console.log(str)
+		// 		return str.toUpperCase();
+		// 	}
+		// },
 		methods:{
 			submit: function(){
 				console.log("se ejecuta el metodo submit")
-				console.log(this.palabras)
-				console.log(this.persona)
+				console.log(this.cursosSeleccionados)
+
 			}
 		}
 
