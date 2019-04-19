@@ -16,8 +16,9 @@
 		 <form v-on:submit.prevent="submit" action="" method="post">
 		 	<h2>que te gusta mas para hacer front?</h2>
 		 	<template v-for="curso in cursos">
-		 		<input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value">
-		 		<label v-bind:for="curso.value">{{curso.nombre}}</label>
+		 		<curso v-bind:curso="curso" :cursos-seleccionados="cursosSeleccionados"></curso>
+		 		<!-- <input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value">
+		 		<label v-bind:for="curso.value">{{curso.nombre}}</label> -->
 		 	</template>
 			<button type="submit">Enviar</button>
 		 </form>
@@ -37,6 +38,17 @@
 
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
 	<script>
+	//you cant put 2 etiquetas at the same label, has to be 1 which wrap the others.
+	Vue.component('curso', {
+		props:['curso', 'cursosSeleccionados'],
+		template:`
+		<div>
+			<input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value">
+			 <label v-bind:for="curso.value">{{curso.nombre}}</label>
+		 </div>
+		`
+	})
+
 	let app = new Vue({
 		el: "#app",
 		data: {
