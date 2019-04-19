@@ -16,7 +16,7 @@
 		 <form v-on:submit.prevent="submit" action="" method="post">
 		 	<h2>que te gusta mas para hacer front?</h2>
 		 	<template v-for="curso in cursos">
-		 		<curso v-bind:curso="curso" :cursos-seleccionados="cursosSeleccionados"></curso>
+		 		<curso v-bind:curso="curso" v-on:checked="selectCurso"></curso>
 		 		<!-- <input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value">
 		 		<label v-bind:for="curso.value">{{curso.nombre}}</label> -->
 		 	</template>
@@ -40,10 +40,18 @@
 	<script>
 	//you cant put 2 etiquetas at the same label, has to be 1 which wrap the others.
 	Vue.component('curso', {
-		props:['curso', 'cursosSeleccionados'],
+		props:['curso'],
+		methods:{
+			onchange:function(evento){
+				// $emit es un metodo para emitir o enviar el evento que en este caso seria onchange, le tienes que dar varios parametros. el primero es el nombre del evento.
+				//luego le pasaremos los parametros, en este caso podemos darles ya sea la class , id , data, el valor, txt etc
+				//en el caso de checkbox uno puede usar el evento que le pasamos y ver si el this. esta chekeado o no. evento.target.checked
+				this.$emit("checked", this.curso.value, evento.target.checked)
+			}
+		},
 		template:`
 		<div>
-			<input v-model="cursosSeleccionados" type="checkbox" :id="curso.value" :value="curso.value">
+			<input type="checkbox" :id="curso.value" :value="curso.value" @change="onchange">
 			 <label v-bind:for="curso.value">{{curso.nombre}}</label>
 		 </div>
 		`
@@ -72,6 +80,14 @@
 				console.log("se ejecuta el metodo submit")
 				console.log(this.cursosSeleccionados)
 
+			},
+			selectCurso: function(cursoclickeado, chequeado){
+				if(chequeado){
+					this.cursosSeleccionados.push(cursoclickeado)
+				}else{
+					let index = this.cursosSeleccionados.indexOf(cursoclickeado)
+					this.cursosSeleccionados.splice(index, 1)
+				}
 			}
 		}
 

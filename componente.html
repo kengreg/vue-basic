@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Como crear componentes con VueJs</title>
+  </head>
+  <body>
+    <div id="app">
+      <form v-on:submit.prevent="submit" action="" method="get">
+        <h2>Cuales con tus cursos favoritos?</h2>
+
+        <!--1-por cada curso en cursos use el siguiente componente-->
+        <template v-for="curso in cursos">
+
+          <!--use este componente para mostrar lo que queremos en la pantalla, con v-bind: le inertamos la variable curso, es la misma variable que tenemos arriba en template entonces este llamado a la etiqueta curso contiene v-bind que le pasamos ese curso para que lo tome como el curso al que tiene que pasarle el template que tiene este componente en su logica -->
+          <!--7- el atributo v-on:checked captura el evento que envio el componente hijo y cuando sucede dispara un metodo llamado selectCurso, este lo creamos en los methods del componente padre -->
+          <curso v-bind:curso="curso" v-on:checked="selectCurso"></curso>
+      
+        </template>
+        <button type="submit">enviar</button>
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script >
+      
+      //2-creamos este componente hijo, para que vue sepa que cada vez que aparezca, la etiqueta curso aprezca eso en pantalla lo que tiene el componente, para esto el primer parametro es el nombre de la etiqueta, en este caso es la etiqueta curso.
+      Vue.component('curso', {
+
+        //4- vamos a indicarle las propiedades que necesita este componente para dibujarse, esto lo hacemos con  la palbra props, y le pasamos un array, en este caso necesita el curso, de donde viene ese curso, del curso.value que toma el template por cada uno de los curso en cusrsos
+        props: [ 'curso' ],
+
+        //-6.1- El componente curso tiene que emitir un evento cada vez que suceda algo que el padre tenga que escuchar, entonces cada vez que seleccionemos un curso el componente hijo tiene que emitir un evento diciendo si ese curso fue checkeado o si se saco elcheck, y el padre es el que va a tener registro de los cursos seleccionados, ese metodo llamado onchange lo definimos aqui en methods, para  hagamos algo con el, lo indicado seria recordemos notificarle al padre para que este registre los cambios
+        methods: {
+          //6.2-this.emit('checked' de este metodo de este emitamos otro evento llemado 'checked, es decir que se checkeo un curso,  y como segundo parametro  le pasamos el valor del curso el nombre y valor this.curso.value  y asi pasarlos en este emit, como tercer parametro pasamos si el elemento fue checkeado o desckechado eso lo hacemos accediendo a la variable del evento'), ya con esto listo el componente padre tiene que capturar este evento que emitimos para que este escuchando cada vez que hayan cambios cada vez que se de check en algun de los cursos en el dom
+          onchange: function (ev) {
+            this.$emit('checked', this.curso.value, ev.target.checked)
+          }
+        },
+
+      //3-el segundo de los parametros es un objeto js lo llamaremos template, y ahi le decimos como queremos que ese componente aparezca en pantalla, entonces este atributo template recibe un templateliteral  para insertar ahi lo que queremos que haga ese template que tenga el componente
+
+      //6-la linea v-on:change en el input checkbox nos anza un evento llamado onchange este evento mira para que cada vez que halla un cambio en el valor que tiene llamemos a un evento, este evento lo guardamos en el evento hijo, ya sabemos que va en un atributo objeto llamado methodsy ahi lo declaramos,
+        template: `
+          <div>
+            <input  type="checkbox" v-bind:id="curso.value" v-bind:value="curso.value" v-on:change="onchange" />
+            <label v-bind:for="curso.value">{{ curso.nombre }}</label>
+          </div>
+        `
+      })    
+      let app =  new Vue({
+        el: '#app',
+        data: {
+          //este array contiene todos los cursos, 
+          cursos: [
+            { nombre: 'Curso de vue.js', value: 'vue'},
+            { nombre: 'Curso de SEO', value: 'seo'},
+            { nombre: 'Curso de react y redux', value: 'react'},
+            { nombre: 'Curso de Growth Marketing', value: 'growth'}
+          ],
+          //aqui van los cursos seleccionados
+          cursosSeleccionados: []
+          },
+          methods: {
+            submit: function() {
+            console.log('se ejecuta el metodo submit')
+            //hacemos console.log de esos cursosSeleccionados y lo hacemos con this para referirnos a esa instancia la de este objeto de vue
+            console.log(this.cursosSeleccionados)
+            },
+
+            //7.1- aqui creamos ese metodo  y va a recibir como parametro los dos parametros que le pasamos a checked que si recodamos son el curso, y si esta checkeado, vue se encarga de pasarle los dos parametros desde el evento en el componente hijo
+            selectCurso: function (curso, checked) {
+
+              //si fue checkeado lo agregamos a la lista de cursos seleccionados
+              if(checked) {
+                this.cursosSeleccionados.push(curso)
+              }
+              //si no saquelo de ese array  si ya estaba
+              else {
+                //definimos cual es el index de ese curso lo obtenemos
+                let index = this.cursosSeleccionados.indexOf(curso)
+                //lo quitamos del array
+                this.cursosSeleccionados.splice(index, 1)
+              }
+
+            }
+          }
+      })
+    </script>
+  </body>
+</html>
+
+<!--Lo que sucede aqui es que el componente padre, que en este caso es el que declaramos con new Vue, le pasa las porpiedades que tiene al componente hijo, pero el componente hijo cada vez que quiera modificar cuales son los cursos seleccionados, no debe hacerlo directamente sobre los atributos del padre, esta mal, el hijo debe emitir eventos para que el padre responda ante esos eventos-->
