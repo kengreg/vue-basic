@@ -14,6 +14,8 @@ templates_c/*
 
 # Node
 node_modules/
+npm-debug.log
+yarn-error.log
 bk/
 
 ################################################################################
@@ -23,13 +25,21 @@ bk/
 
 # ドットファイル
 .*
+.DS_Store
 
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 # ドットファイル例外
 !.ht*
 !.gitignore
 
 # 画像
-# 画像
+
 *.png
 *.jpg
 *.jpeg
