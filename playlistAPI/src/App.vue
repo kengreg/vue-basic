@@ -4,6 +4,7 @@
     h1 Playlist
     select(v-model="selectedCountry")
       option(v-for="country in countries" v-bind:value="country.value") {{country.name}}
+    spinner(v-show="loading")
     ul
       //-- Here we declare a component which we will call from other file using this new tag of artist
       //--in order to recognize and get easily each one of the elements in this loop Vue give you a warning in the console telling you to bind a key for each one. So in this case we add v-bind:key using from the API the id of the artist for this purpose.
@@ -11,6 +12,7 @@
 </template>
 
 <script>
+import Spinner from './components/Spinner.vue'
 //-Here we import a component from an external folder. This time to create the "artist" tag element.
 //also we need to add in the export script the "components" with a name which will use the value (try to make them the same to dont confuse)
 import artist from './components/artist.vue'
@@ -27,16 +29,21 @@ export default {
         {name: 'Panama', value: 'panama'},
         {name: 'Japon', value:'japan'}
       ],
-      selectedCountry: 'japan'
+      selectedCountry: 'japan',
+      loading: true
     }
   },
   components:{
-    artist: artist
+    artist: artist,
+    Spinner
   },
   methods: {
     refreshArtists() {
       const self = this
+      this.loading = true
+      this.artists = []
       getArtists(this.selectedCountry).then( function (artists){
+        self.loading = false
         self.artists = artists
       })
     }
